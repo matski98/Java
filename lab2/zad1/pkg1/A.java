@@ -1,4 +1,4 @@
-package klasy;
+package pkg1;
 
 import java.io.*;
 
@@ -10,13 +10,13 @@ public class A{
 		name = _name;
 	}
 	public void callDecrement(){
-		--number;
+		decrement();
 	}
 	public void callIncrement(){
-		++number;
+		increment();
 	}
 	public void callChangeName(String s){
-		name = s;
+		changeName(s);
 	}
 	private void increment(){
 		++number;
@@ -26,5 +26,11 @@ public class A{
 	}
 	void changeName(String s){
 		name = s;
+	}
+	public int getNumber(){
+		return number;
+	}
+	public String getName(){
+		return name;
 	}
 }

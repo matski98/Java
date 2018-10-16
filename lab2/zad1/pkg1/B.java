@@ -1,4 +1,4 @@
-package klasy;
+package pkg1;
 
 import java.io.*;
 
@@ -14,6 +14,6 @@ public class B extends A{
 		number-=2;
 	}
 	void changeName(String s){
-		name = s;
+		name = s+" B";
 	}
 }
