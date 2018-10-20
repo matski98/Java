@@ -6,7 +6,7 @@ public class Test {
 	static LinkedList<Prostokat> lista = new LinkedList<Prostokat>();
    	public static void main(String args[]) {
    		System.out.print("\033[H\033[2J");
-        System.out.flush();
+        	System.out.flush();
    		while(true){
 	   		System.out.println("Aby wczytac prostokat wpisz 1");
 	   		System.out.println("Aby wyświetic wszystkie prostokaty wpisz 2");
@@ -27,12 +27,12 @@ public class Test {
 	      			Prostokat pro = new Prostokat(a,b);
 	      			lista.add(pro);
 	      			System.out.print("\033[H\033[2J");
-            		System.out.flush();
+            			System.out.flush();
 	      			break;
 	      		}
 	      		case "2":{
 	      			System.out.print("\033[H\033[2J");
-            		System.out.flush();
+            			System.out.flush();
 	      			for(int i = 0; i<lista.size(); ++i){
 	      				System.out.println("Prostokat nr: "+(i+1)+" bok A: "+lista.get(i).getA()+" bok B: "+lista.get(i).getB());
 	      			}
@@ -40,7 +40,7 @@ public class Test {
 	      		}
 	      		case "3":{
 	      			System.out.print("\033[H\033[2J");
-            		System.out.flush();
+            			System.out.flush();
 	      			double suma=0;
 	      			for(int i = 0; i<lista.size(); ++i){
 	      				suma+=lista.get(i).area();
