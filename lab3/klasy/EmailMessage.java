@@ -30,49 +30,54 @@ public class EmailMessage {
             = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     public void send(String password, String host) {
-        if(from==null) return;
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp."+host);
-        props.put("mail.smtp.socketFactory.port", "465");
-        props.put("mail.smtp.socketFactory.class",
-                "javax.net.ssl.SSLSocketFactory");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.port", "465");
+        if(!from.isEmpty()&&!to.isEmpty()) {
+            Properties props = new Properties();
+            props.put("mail.smtp.host", "smtp." + host);
+            props.put("mail.smtp.socketFactory.port", "465");
+            props.put("mail.smtp.socketFactory.class",
+                    "javax.net.ssl.SSLSocketFactory");
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.port", "465");
 
-        Session session = Session.getDefaultInstance(props,
-                new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(from,password);
-                    }});
+            Session session = Session.getDefaultInstance(props,
+                    new javax.mail.Authenticator() {
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(from, password);
+                        }
+                    });
 
-        try{
+            try {
 
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(from));
+                MimeMessage message = new MimeMessage(session);
+                message.setFrom(new InternetAddress(from));
 
-            message.setSubject(subject);
-            message.setText(content);
+                message.setSubject(subject);
+                message.setText(content);
 
 
-            for(var address : to) {
-                message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(address));
+                for (var address : to) {
+                    message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(address));
+                }
+
+                if (cc != null) {
+                    for (var cci : cc)
+                        message.addRecipients(Message.RecipientType.CC, InternetAddress.parse(cci));
+                }
+
+                if (bcc != null) {
+                    for (var bcci : bcc)
+                        message.addRecipients(Message.RecipientType.BCC, InternetAddress.parse(bcci));
+                }
+
+                Transport.send(message);
+
+                System.out.println("wyslano pomyslnie");
+
             }
-
-            if(cc != null) {
-                for (var cci : cc)
-                    message.addRecipients(Message.RecipientType.CC, InternetAddress.parse(cci));
+            catch (MessagingException mex) {
+                mex.printStackTrace();
             }
-
-            if(bcc != null){
-                for(var bcci : bcc)
-                    message.addRecipients(Message.RecipientType.BCC, InternetAddress.parse(bcci));
-            }
-
-            Transport.send(message);
-
-            System.out.println("wyslano pomyslnie");
-
-        }catch (MessagingException mex) { mex.printStackTrace(); }
+        }
     }
 
 
