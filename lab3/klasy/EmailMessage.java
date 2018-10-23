@@ -1,5 +1,9 @@
 package klasy;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.util.*;
+import java.util.regex.*;
 public class EmailMessage {
     private String from; //required (must be e-mail)
     private LinkedList<String> to; //required at least one (must be e-mail)
@@ -20,6 +24,62 @@ public class EmailMessage {
         cc=_cc;
         bcc=_bcc;
     }
+    private static final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
+
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+    public void send() {
+
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.op.pl");
+        props.put("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.socketFactory.class",
+                "javax.net.ssl.SSLSocketFactory");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.port", "465");
+
+        System.out.print("Password: ");
+        Scanner sc = new Scanner(System.in);
+        String password = sc.nextLine();
+
+        Session session = Session.getDefaultInstance(props,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(from,password);
+                    }});
+
+        try{
+
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(from));
+
+            message.setSubject(subject);
+            message.setText(content);
+
+
+            for(var adrs : to) {
+                message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(adrs));
+            }
+
+            if(cc != null) {
+                for (var ccs : cc)
+                    message.addRecipients(Message.RecipientType.CC, InternetAddress.parse(ccs));
+            }
+
+            if(bcc != null){
+                for(var bccs : bcc)
+                    message.addRecipients(Message.RecipientType.BCC, InternetAddress.parse(bccs));
+            }
+
+            Transport.send(message);
+
+            System.out.println("message sent successfully...");
+
+        }catch (MessagingException mex) { mex.printStackTrace(); }
+    }
+
+
+
     public static Builder builder() {
         return new EmailMessage.Builder();
     }
@@ -34,6 +94,8 @@ public class EmailMessage {
         private String b_mimeType;
         private LinkedList<String> b_cc;
         private LinkedList<String> b_bcc;
+
+
         public Builder(){
             b_to = new LinkedList<String>();
             b_cc = new LinkedList<String>();
@@ -44,11 +106,16 @@ public class EmailMessage {
             b_mimeType = "";
         }
         public Builder addFrom(String f){
-            b_from=f;
+            if(validate(f)) {
+                b_from=f;
+                System.out.println("validate");
+            }
             return this;
         }
         public Builder addTo(String t){
-            b_to.add(t);
+            if(validate(t)) {
+                b_to.add(t);
+            }
             return this;
         }
         public Builder addSubject(String s){
@@ -69,6 +136,11 @@ public class EmailMessage {
             return new EmailMessage(b_from,b_to,b_subject,b_content,b_mimeType,b_cc,b_bcc);
         }
 
+
+        public static boolean validate(String emailStr) {
+            Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr);
+            return matcher.find();
+        }
     }
 
 }
