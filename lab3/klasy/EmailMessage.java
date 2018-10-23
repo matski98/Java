@@ -26,21 +26,18 @@ public class EmailMessage {
     }
     private static final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
 
-    public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX
+            = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
-    public void send() {
-
+    public void send(String password, String host) {
+        if(from==null) return;
         Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.op.pl");
+        props.put("mail.smtp.host", "smtp."+host);
         props.put("mail.smtp.socketFactory.port", "465");
         props.put("mail.smtp.socketFactory.class",
                 "javax.net.ssl.SSLSocketFactory");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.port", "465");
-
-        System.out.print("Password: ");
-        Scanner sc = new Scanner(System.in);
-        String password = sc.nextLine();
 
         Session session = Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
@@ -57,23 +54,23 @@ public class EmailMessage {
             message.setText(content);
 
 
-            for(var adrs : to) {
-                message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(adrs));
+            for(var address : to) {
+                message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(address));
             }
 
             if(cc != null) {
-                for (var ccs : cc)
-                    message.addRecipients(Message.RecipientType.CC, InternetAddress.parse(ccs));
+                for (var cci : cc)
+                    message.addRecipients(Message.RecipientType.CC, InternetAddress.parse(cci));
             }
 
             if(bcc != null){
-                for(var bccs : bcc)
-                    message.addRecipients(Message.RecipientType.BCC, InternetAddress.parse(bccs));
+                for(var bcci : bcc)
+                    message.addRecipients(Message.RecipientType.BCC, InternetAddress.parse(bcci));
             }
 
             Transport.send(message);
 
-            System.out.println("message sent successfully...");
+            System.out.println("wyslano pomyslnie");
 
         }catch (MessagingException mex) { mex.printStackTrace(); }
     }
@@ -108,7 +105,6 @@ public class EmailMessage {
         public Builder addFrom(String f){
             if(validate(f)) {
                 b_from=f;
-                System.out.println("validate");
             }
             return this;
         }

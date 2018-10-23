@@ -10,7 +10,8 @@ public class Main {
                     .addSubject("Mail testowy")
                     .addcontent("Brak tresci")
                     .build();
-            wiadomosc.send();
+
+            wiadomosc.send("haslo1234", "agh.edu.pl");
         }
         catch (Exception e){ e.printStackTrace(); }
     }
