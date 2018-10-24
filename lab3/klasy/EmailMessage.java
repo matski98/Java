@@ -29,10 +29,10 @@ public class EmailMessage {
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX
             = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
-    public void send(String password, String host) {
+    public void send(String password) {
         if(!from.isEmpty()&&!to.isEmpty()) {
             Properties props = new Properties();
-            props.put("mail.smtp.host", "smtp." + host);
+            props.put("mail.smtp.host", "smtp." +from.split("@")[1]);
             props.put("mail.smtp.socketFactory.port", "465");
             props.put("mail.smtp.socketFactory.class",
                     "javax.net.ssl.SSLSocketFactory");
