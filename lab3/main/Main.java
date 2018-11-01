@@ -11,7 +11,7 @@ public class Main {
                     .addcontent("Brak tresci")
                     .build();
 
-            wiadomosc.send("haslo1234", "agh.edu.pl");
+            wiadomosc.send("haslo1234");
         }
         catch (Exception e){ e.printStackTrace(); }
     }
