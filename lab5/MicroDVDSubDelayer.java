@@ -21,17 +21,17 @@ public class MicroDVDSubDelayer {
                     output.write(delay(line, delay, fps, licznik));
                 }
                 catch (DelayExceptions e){
-                    System.out.println(e.getMessage());
+                    System.err.println(e.getMessage());
                     continue;
                 }
                 catch (Exception e){
-                    System.out.println("nieobslugiwany typ wyjatku w linii: " + licznik + " tresc: " + line);
+                    System.err.println("nieobslugiwany typ wyjatku w linii: " + licznik + " tresc: " + line);
                     continue;
                 }
             }
         }
         catch (Exception e){
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
 
         }
     }
