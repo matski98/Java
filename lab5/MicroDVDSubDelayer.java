@@ -8,6 +8,7 @@ public class MicroDVDSubDelayer {
 
     public static void main(String[] args){
         int licznik = 0;
+        if (args.length != 4) return;
         try{
             BufferedReader input = new BufferedReader(new FileReader(new File(args[0])));
             FileWriter output = new FileWriter(new File(args[1]));
@@ -16,14 +17,21 @@ public class MicroDVDSubDelayer {
             int fps = Integer.parseInt(args[3]);
             while ((temp = input.readLine()) != null){
                 ++licznik;
-                output.write(delay(temp, delay, fps));
+                try{
+                    output.write(delay(temp, delay, fps, licznik));
+                }
+                catch (Exception e){
+                    System.out.println(e.getMessage());
+                    continue;
+                }
             }
         }
         catch (Exception e){
-            System.out.println(e.getMessage() + " w linii " + licznik);
+            System.out.println(e.getMessage());
+
         }
     }
-    static String delay(String in, int delay, int fps)throws DelayExceptions{
+    static String delay(String in, int delay, int fps, int licznik)throws DelayExceptions{
         String[] tab = in.split("}");
         Integer begin;
         Integer end;
@@ -33,14 +41,14 @@ public class MicroDVDSubDelayer {
             begin = Integer.parseInt(tab[0]);
             end = Integer.parseInt(tab[1]);
             if (begin >= end){
-                throw new DelayExceptions("pierwsza liczba wieksza lub rowna drugiej");
+                throw new DelayExceptions("pierwsza liczba wieksza lub rowna drugiej w linii " + licznik);
             }
             begin += fps * delay / 1000;
             end += fps * delay / 1000;
             return "{" + begin.toString() + "}{" + end.toString() + "}" + tab[2] + "\n";
         }
         else{
-            throw new DelayExceptions("linia nie pasuje");
+            throw new DelayExceptions("linia nie pasuje w linii " + licznik);
         }
     }
 }
