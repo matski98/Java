@@ -12,16 +12,20 @@ public class MicroDVDSubDelayer {
         try{
             BufferedReader input = new BufferedReader(new FileReader(new File(args[0])));
             FileWriter output = new FileWriter(new File(args[1]));
-            String temp;
+            String line;
             int delay = Integer.parseInt(args[2]);
             int fps = Integer.parseInt(args[3]);
-            while ((temp = input.readLine()) != null){
+            while ((line = input.readLine()) != null){
                 ++licznik;
                 try{
-                    output.write(delay(temp, delay, fps, licznik));
+                    output.write(delay(line, delay, fps, licznik));
+                }
+                catch (DelayExceptions e){
+                    System.out.println(e.getMessage());
+                    continue;
                 }
                 catch (Exception e){
-                    System.out.println(e.getMessage());
+                    System.out.println("nieobslugiwany typ wyjatku w linii: " + licznik + " tresc: " + line);
                     continue;
                 }
             }
