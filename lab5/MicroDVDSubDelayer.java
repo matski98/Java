@@ -41,14 +41,14 @@ public class MicroDVDSubDelayer {
             begin = Integer.parseInt(tab[0]);
             end = Integer.parseInt(tab[1]);
             if (begin >= end){
-                throw new DelayExceptions("pierwsza liczba wieksza lub rowna drugiej w linii " + licznik);
+                throw new DelayExceptions("pierwsza liczba wieksza lub rowna drugiej w linii " + licznik + " tresc linii: " + in);
             }
             begin += fps * delay / 1000;
             end += fps * delay / 1000;
             return "{" + begin.toString() + "}{" + end.toString() + "}" + tab[2] + "\n";
         }
         else{
-            throw new DelayExceptions("linia nie pasuje w linii " + licznik);
+            throw new DelayExceptions("linia nie pasuje w linii " + licznik +  " tresc linii: " + in);
         }
     }
 }
