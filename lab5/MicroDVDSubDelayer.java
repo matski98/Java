@@ -8,22 +8,34 @@ public class MicroDVDSubDelayer {
 
     public static void main(String[] args){
         int licznik = 0;
+        if (args.length != 4) return;
         try{
             BufferedReader input = new BufferedReader(new FileReader(new File(args[0])));
             FileWriter output = new FileWriter(new File(args[1]));
-            String temp;
+            String line;
             int delay = Integer.parseInt(args[2]);
             int fps = Integer.parseInt(args[3]);
-            while ((temp = input.readLine()) != null){
+            while ((line = input.readLine()) != null){
                 ++licznik;
-                output.write(delay(temp, delay, fps));
+                try{
+                    output.write(delay(line, delay, fps, licznik));
+                }
+                catch (DelayExceptions e){
+                    System.err.println(e.getMessage());
+                    continue;
+                }
+                catch (Exception e){
+                    System.err.println("nieobslugiwany typ wyjatku w linii: " + licznik + " tresc: " + line);
+                    continue;
+                }
             }
         }
         catch (Exception e){
-            System.out.println(e.getMessage() + " w linii " + licznik);
+            System.err.println(e.getMessage());
+
         }
     }
-    static String delay(String in, int delay, int fps)throws DelayExceptions{
+    static String delay(String in, int delay, int fps, int licznik)throws DelayExceptions{
         String[] tab = in.split("}");
         Integer begin;
         Integer end;
@@ -33,14 +45,14 @@ public class MicroDVDSubDelayer {
             begin = Integer.parseInt(tab[0]);
             end = Integer.parseInt(tab[1]);
             if (begin >= end){
-                throw new DelayExceptions("pierwsza liczba wieksza lub rowna drugiej");
+                throw new DelayExceptions("pierwsza liczba wieksza lub rowna drugiej w linii " + licznik + " tresc linii: " + in);
             }
             begin += fps * delay / 1000;
             end += fps * delay / 1000;
             return "{" + begin.toString() + "}{" + end.toString() + "}" + tab[2] + "\n";
         }
         else{
-            throw new DelayExceptions("linia nie pasuje");
+            throw new DelayExceptions("linia nie pasuje w linii " + licznik +  " tresc linii: " + in);
         }
     }
 }
