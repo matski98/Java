@@ -9,11 +9,17 @@ public class MyPanel extends java.awt.Panel{
     private LinkedList<Shape> ShapeList = new LinkedList<Shape>();
 
     public MyPanel(){
-        ShapeList.add(new Kolo(0,0,150,Color.BLACK,true));
-        ShapeList.add(new Trojkat(0,300,300,0,300,0,Color.BLUE,true));
-        ShapeList.add(new Kwadrat(20,30,50,Color.PINK,true));
-        ShapeList.add(new Kolo(100,200,50,Color.GREEN,true));
-        ShapeList.add(new Kwadrat(300,300,100,Color.RED,false));
+        //ShapeList.add(new Kolo(0,0,150,Color.BLACK,true));
+        ShapeList.add(new Kwadrat(300,95,50,Color.GRAY,true));
+        ShapeList.add(new Trojkat(225,50,400,10,200,200,Color.RED,true));
+        ShapeList.add(new Kwadrat(100,200,250,new Color(160,85,45),true));
+        ShapeList.add(new Kolo(74,175,50,Color.CYAN, true));
+        ShapeList.add(new Kwadrat(130,250,50,Color.CYAN,true));
+        ShapeList.add(new Kwadrat(270,250,50,Color.CYAN,true));
+        ShapeList.add(new Kwadrat(270,350,50,Color.CYAN,true));
+        ShapeList.add(new Kwadrat(130,350,50,Color.CYAN,true));
+        ShapeList.add(new Prostokat(205,375,40, 75,Color.RED,true));
+
     }
 
     @Override
