@@ -18,8 +18,6 @@ public class Prostokat extends Shape{
         bool=wypelnienie;
         c=color;
     }
-    public void setX(int _i){i=_i;}
-    public void setY(int _i){i1=_i;}
 
     public void draw(Graphics g){
         g.setColor(c);
@@ -27,5 +25,26 @@ public class Prostokat extends Shape{
             g.fillRect(i,i1,i2,i3);
         else
             g.drawRect(i,i1,i2,i3);
+    }
+
+    public int getX() {
+        return i;
+    }
+
+    public int getY() {
+        return i1;
+    }
+
+    public void setX(int x) {
+        i = x;
+    }
+
+    public void setY(int y) {
+        i1 = y;
+    }
+
+    public boolean mouseOver(int px, int py) {
+        return (px >= i && px <= i + i2
+                && py >= i1 && py <= i1 + i3);
     }
 }

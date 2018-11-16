@@ -6,23 +6,45 @@ public class Kolo extends Shape{
     private int i, i1;
     private final int i2;
     private final Color c;
-    private final boolean b;
+    private final boolean bool;
 
     public Kolo(int x, int y, int promien,Color color,boolean wypelnienie){
-        i=y;
-        i1=x;
+        i=x;
+        i1=y;
         i2=promien*2;
         c=color;
-        b=wypelnienie;
+        bool =wypelnienie;
     }
-    public void setX(int _i){i=_i;}
-    public void setY(int _i){i1=_i;}
 
     public void draw(Graphics g){
         g.setColor(c);
-        if(b)
+        if(bool)
             g.fillOval(i,i1,i2,i2);
         else
             g.drawOval(i,i1,i2,i2);
+    }
+    public int getX() {
+        return i;
+    }
+
+    public int getY() {
+        return i1;
+    }
+
+    public void setX(int x) {
+        i = x;
+    }
+
+    public void setY(int y) {
+        i1 = y;
+    }
+
+
+    public boolean mouseOver(int px, int py) {
+
+        int cx = i + i2/2;
+        int cy = i1 + i2/2;
+
+        return (px - cx)*(px - cx) + (py - cy)*(py - cy) <= i2*i2/4;
     }
 }
