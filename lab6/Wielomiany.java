@@ -2,8 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Wielomiany extends JFrame{
     private JTextField wielomianJTextField;
@@ -12,7 +10,7 @@ public class Wielomiany extends JFrame{
     private JTextField samplingJTextField;
     private JButton rysujButton;
     private JPanel panel1;
-    private JPanel root;
+    private JPanel panel2;
 
     private String errorString = null;
     private HashMap<Double, Double> punkty;
@@ -25,7 +23,7 @@ public class Wielomiany extends JFrame{
     public Wielomiany() {
         super("Program rysujący wykresy wielomianów");
         add(panel1);
-        add(root);
+        add(panel2);
         setSize(640, 480);
         setMinimumSize(new Dimension(640, 480));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -47,9 +45,6 @@ public class Wielomiany extends JFrame{
         wielomiany.setVisible(true);
     }
     private void rysujButtonActionPerformed(ActionEvent evt){
-        errorString = null;
-        Pattern pattern = Pattern.compile("[-?[0-9]*//.?[0-9]*,]*");
-        Matcher matcher = pattern.matcher(wielomianJTextField.getText());
         wielomianJTextField.setInputVerifier(new MyVerifier("[-?[0-9]*//.?[0-9]*,]*"));
         startJTextField.setInputVerifier(startJTextField.getInputVerifier());
         stopJTextField.setInputVerifier(stopJTextField.getInputVerifier());
@@ -85,8 +80,8 @@ public class Wielomiany extends JFrame{
                 punkty.put(i, f(i));
             }
         }
-
     }
+
     private Double f(Double x) {
         Double out = 0.0;
         for (Double w : wspolczynniki) {
@@ -94,6 +89,7 @@ public class Wielomiany extends JFrame{
         }
         return out;
     }
+
     public class WykresFrame extends JFrame {
 
         public WykresFrame() {
@@ -103,6 +99,7 @@ public class Wielomiany extends JFrame{
             setDefaultCloseOperation(EXIT_ON_CLOSE);
         }
     }
+
     private class WykresPanel extends JPanel {
 
         @Override
@@ -160,6 +157,7 @@ public class Wielomiany extends JFrame{
             }
         }
     }
+
     private class MyVerifier extends InputVerifier {
 
         private final String validString;
