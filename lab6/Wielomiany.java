@@ -13,11 +13,6 @@ public class Wielomiany extends JFrame{
     private JPanel panel2;
 
     private String errorString = null;
-    private HashMap<Double, Double> punkty;
-    private Double sampling;
-    private LinkedList<Double> wspolczynniki;
-    private Double start;
-    private Double stop;
     private JPanel wykrespanel;
 
     public Wielomiany() {
@@ -63,31 +58,15 @@ public class Wielomiany extends JFrame{
         }
         else{
             Double temp;
-            start = Double.parseDouble(startJTextField.getText());
-            stop = Double.parseDouble(stopJTextField.getText());
-            sampling = Double.parseDouble(samplingJTextField.getText());
-            wspolczynniki = new LinkedList<>();
+            logika.start = Double.parseDouble(startJTextField.getText());
+            logika.stop = Double.parseDouble(stopJTextField.getText());
+            logika.sampling = Double.parseDouble(samplingJTextField.getText());
+            //wspolczynniki = new LinkedList<>();
             for (String factor : wielomianJTextField.getText().split(",")) {
-                wspolczynniki.add(Double.parseDouble(factor));
+                logika.wspolczynniki.add(Double.parseDouble(factor));
             }
-            if (start > stop) {
-                temp = start;
-                start = stop;
-                stop = temp;
-            }
-            punkty = new HashMap<>();
-            for (Double i = start; i <= stop; i += sampling) {
-                punkty.put(i, f(i));
-            }
+            logika.dodajpunkty();
         }
-    }
-
-    private Double f(Double x) {
-        Double out = 0.0;
-        for (Double w : wspolczynniki) {
-            out = out * x + w;
-        }
-        return out;
     }
 
     public class WykresFrame extends JFrame {
@@ -110,18 +89,18 @@ public class Wielomiany extends JFrame{
             Long temp;
             if (errorString != null) {
                 g.drawString(errorString, 10, 15);
-            } else if (start != null) {
+            } else if (logika.start != null) {
                 g.drawLine(15, 0, 15, height);
                 g.drawLine(15, height, width + 15, height);
-                temp = Math.round(start);
+                temp = Math.round(logika.start);
                 g.drawString(temp.toString(), 10, height + 15);
-                temp = Math.round(stop);
+                temp = Math.round(logika.stop);
                 g.drawString(temp.toString(), width - 10, height + 15);
-                Double scaleX = width / Math.abs(start - stop);
+                Double scaleX = width / Math.abs(logika.start - logika.stop);
 
-                Double minY = punkty.get(start);
+                Double minY = logika.punkty.get(logika.start);
                 Double maxY = minY;
-                for (Map.Entry<Double, Double> point : punkty.entrySet()) {
+                for (Map.Entry<Double, Double> point : logika.punkty.entrySet()) {
                     if (point.getValue() < minY) {
                         minY = point.getValue();
                     } else if (point.getValue() > maxY) {
@@ -136,16 +115,16 @@ public class Wielomiany extends JFrame{
                     g.drawString(temp.toString(), 0, height);
                     Double scaleY = height / Math.abs(maxY - minY);
                     Double prevX = null, prevY = null;
-                    for (Double i = start; i <= stop; i += sampling) {
+                    for (Double i = logika.start; i <= logika.stop; i += logika.sampling) {
                         if (prevY == null) {
-                            prevY = punkty.get(i);
+                            prevY = logika.punkty.get(i);
                             prevX = i;
                         } else {
-                            g.drawLine((int) ((prevX - start) * scaleX) + 15,
+                            g.drawLine((int) ((prevX - logika.start) * scaleX) + 15,
                                     (int) (height - (prevY - minY) * scaleY), (int)
-                                            ((i - start) * scaleX) + 15, (int)
-                                            (height - (punkty.get(i) - minY) * scaleY));
-                            prevY = punkty.get(i);
+                                            ((i - logika.start) * scaleX) + 15, (int)
+                                            (height - (logika.punkty.get(i) - minY) * scaleY));
+                            prevY = logika.punkty.get(i);
                             prevX = i;
                         }
                     }
