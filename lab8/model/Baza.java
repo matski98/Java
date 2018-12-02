@@ -1,6 +1,4 @@
-package sql;
-
-import javafx.scene.control.Alert;
+package model;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -35,8 +33,6 @@ public class Baza {
     public LinkedList<Book> listAll() {
         try {
             LinkedList<Book> out = new LinkedList<Book>();
-            if(!connect())
-                showError();
             stmt = conn.createStatement();
             rs = stmt.executeQuery("SELECT * FROM books");
             while (rs.next()) {
@@ -62,15 +58,12 @@ public class Baza {
                 stmt = null;
             }
         }
-        LinkedList<Book> lista = new LinkedList<Book>();
-        return lista;
+        return null;
     }
 
     public LinkedList<Book> findByAuthor(String author) {
         try {
             LinkedList<Book> out = new LinkedList<>();
-            if(!connect())
-                showError();
             stmt = conn.createStatement();
             rs = stmt.executeQuery("SELECT * FROM books WHERE author LIKE '% "+author+"'");
             while (rs.next()) {
@@ -96,15 +89,12 @@ public class Baza {
                 stmt = null;
             }
         }
-        LinkedList<Book> lista = new LinkedList<Book>();
-        return lista;
+        return null;
     }
 
     public LinkedList<Book> findByISBN(String isbn) {
         try {
             LinkedList<Book> out = new LinkedList<Book>();
-            if(!connect())
-                showError();
             stmt = conn.createStatement();
             rs = stmt.executeQuery("SELECT * FROM books WHERE isbn = '"+isbn+"'");
             while(rs.next())
@@ -140,17 +130,12 @@ public class Baza {
                     "INSERT INTO `books` (`isbn`,`title`,`author`,`year`) "
                             + "VALUES ('"+isbn+"','"+title+"','"+author+"',"+year.toString()+")");
 
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private void showError(){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Error");
-        alert.setHeaderText("Brak połączenia z bazą");
-        alert.setContentText("3 próby połączenia z bazą danych nie powiodły się");
-        alert.showAndWait();
-    }
+
 }
 

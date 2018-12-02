@@ -1,4 +1,4 @@
-package sql;
+package model;
 
 public class Book {
     private final String isbn;
